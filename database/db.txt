@@ -1,0 +1,47 @@
+# create folder:
+#	for windows: "C:\data\db"
+#	for unix: "/data/db"
+use db
+
+db.createCollection("accounts")
+db.createCollection("floor)
+db.createCollection("room")
+db.createCollection("lights")
+db.createCollection("motion_detector")
+db.createCollection("light_sensor")
+
+
+db.accounts.insertOne({"name": "admin", "password": "admin"}) #TODO: password mast be saving in md5
+
+#Kitchen
+db.room.insertOne({"_id": "kitchen", coordinateX: [0, 70, 70, 0], coordinateY: [0, 0, 70, 70]})
+db.lights.insertOne({room: "kitchen", coordinateXY: [10, 5], "color": "000000"})
+db.lights.insertOne({room: "kitchen", coordinateXY: [10, 10], "color": "000000"})
+db.lights.insertOne({room: "kitchen", coordinateXY: [10, 15], "color": "000000"})
+db.lights.insertOne({room: "kitchen", coordinateXY: [50, 50], "color": "000000"})
+db.motion_detector.insertOne({room: "kitchen", coordinateXY: [0, 0], motion: 0, data: [0,0]})
+db.light_sensor.insertOne({room: "kitchen", coordinateXY: [70, 0], data: "000000"})
+
+#Bedroom
+db.room.insertOne({"_id": "bedroom", coordinateX: [0, 70, 70, 0], coordinateY: [0, 0, 70, 70]})
+db.lights.insertOne({room: "bedroom", coordinateXY: [50, 50], "color": "000000"})
+db.motion_detector.insertOne({room: "bedroom", coordinateXY: [0, 0], motion: 0, data: [0,0]})
+db.light_sensor.insertOne({room: "bedroom", coordinateXY: [70, 0], data: "000000"})
+
+#Corridor
+db.room.insertOne({"_id": "corridor", coordinateX: [0, 140, 140, 90, 90, 0], coordinateY: [0, 0, 50, 50, 70, 70]})
+db.lights.insertOne({room: "corridor", coordinateXY: [50, 50], "color": "000000"})
+db.motion_detector.insertOne({room: "corridor", coordinateXY: [0, 0], motion: 0, data: [0,0]})
+db.light_sensor.insertOne({room: "corridor", coordinateXY: [70, 0], data: "000000"})
+
+#Bathroom
+db.room.insertOne({"_id": "bathroom", coordinateX: [0, 50, 50, 0], coordinateY: [0, 0, 20, 20]})
+db.lights.insertOne({room: "bathroom", coordinateXY: [25, 10], "color": "000000"})
+db.motion_detector.insertOne({room: "bathroom", coordinateXY: [0, 0], motion: 0, data: [0,0]})
+db.light_sensor.insertOne({room: "bathroom", coordinateXY: [50, 0], data: "000000"})
+
+#Floor
+db.room.insertOne({room: "kitchen", positionXY[0, 0]})
+db.room.insertOne({room: "bedroom", positionXY[70, 0]})
+db.room.insertOne({room: "corridor", positionXY[0, 70]})
+db.room.insertOne({room: "bathroom", positionXY[90, 120]})
