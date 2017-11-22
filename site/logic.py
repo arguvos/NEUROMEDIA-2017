@@ -1,17 +1,20 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, json
 from flask_pymongo import PyMongo
 from flask import jsonify
+from bson.json_util import dumps
 import flask_login
 import flask
+import json
 
 app = Flask(__name__)
-mongo = PyMongo(app)
+
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config["MONGO_DBNAME"] =  'db'
+app.config['MONGO_DBNAME'] =  'db'
 flask_login.home_page='index.html'
+mongo = PyMongo(app)
 #Логи и пароль TODO: переместить в базу данных и использовать для пароля md5
 users = {'admin': {'password': 'admin'}}
 
@@ -72,8 +75,18 @@ def logout():
 
 @app.route('/')
 @flask_login.login_required
-def home_page():
+def index():
     return render_template('index.html')
+
+@app.route('/home', methods=['POST'])
+@flask_login.login_required
+def home():
+    #room = request.json
+    #print(room)
+    r = mongo.db.room.find({'name':room});
+    print(r);
+    l = list(r)
+    return dumps(l);
 
 if __name__ == '__main__':
     app.run(debug=True)
