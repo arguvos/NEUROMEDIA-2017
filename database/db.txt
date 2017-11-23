@@ -15,10 +15,10 @@ db.accounts.insertOne({"name": "admin", "password": "admin"}) #TODO: password ma
 
 #Kitchen
 db.room.insertOne({"_id": "kitchen", coordinateX: [0, 70, 70, 0], coordinateY: [0, 0, 70, 70]})
-db.lights.insertOne({room: "kitchen", coordinateXY: [10, 5], "color": "000000"})
-db.lights.insertOne({room: "kitchen", coordinateXY: [10, 10], "color": "000000"})
-db.lights.insertOne({room: "kitchen", coordinateXY: [10, 15], "color": "000000"})
-db.lights.insertOne({room: "kitchen", coordinateXY: [50, 50], "color": "000000"})
+db.lights.insertOne({room: "kitchen", coordinateXY: [10, 5], "color": "#fad201"})
+db.lights.insertOne({room: "kitchen", coordinateXY: [10, 10], "color": "#fff099"})
+db.lights.insertOne({room: "kitchen", coordinateXY: [10, 15], "color": "#f0e891"})
+db.lights.insertOne({room: "kitchen", coordinateXY: [50, 50], "color": "#ffd700"})
 db.motion_detector.insertOne({room: "kitchen", coordinateXY: [0, 0], motion: 0, data: [0,0]})
 db.light_sensor.insertOne({room: "kitchen", coordinateXY: [70, 0], data: "000000"})
 

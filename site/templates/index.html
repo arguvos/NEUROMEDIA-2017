@@ -24,7 +24,7 @@
         </nav> 
         <div class="clear"></div>
         <script src="static/js/jquery-1.9.0.js"></script>
-        <script src="static/js/script1.js"></script>
+        <script src="static/js/script.js"></script>
     </header>
 
 <canvas id="canvas" width="400" height="200" style="display:block; border:1px solid #d3d3d3"></canvas>
@@ -71,6 +71,34 @@ function getData(){
             console.log(error);
         }
     });
+
+    $.ajax({
+        url: '/light_sensor',
+        dataType: 'json',
+        data: data,        
+        type: 'POST',
+        success: function(response){
+            light_sensor = response;
+            console.log(response);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+    $.ajax({
+        url: '/motion_detector',
+        dataType: 'json',
+        data: data,        
+        type: 'POST',
+        success: function(response){
+            motion_detector = response;
+            console.log(response);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });        
     draw(room, lights, light_sensor, motion_detector)
 }
 
@@ -110,7 +138,38 @@ function draw(room, lights, light_sensor, motion_detector){
     }
 
     //свет
-    //lights.coordinateXY[0], lights.coordinateXY[0]
+    l = lights["length"];
+    
+    for (var i=0;i<l;i++)
+    {        
+        ctx.strokeStyle = lights[i].color;
+        ctx.beginPath();
+
+        ctx.arc( offsetX + lights[i].coordinateXY[0] * k, offsetY + lights[i].coordinateXY[1] * k, 5, 0, 2 * Math.PI, false)
+        ctx.stroke();
+    }
+
+    //датчик света
+    l = light_sensor["length"];
+    ctx.strokeStyle = 'green';
+    
+    for (var i=0;i<l;i++)
+    {         
+        ctx.beginPath();
+        ctx.arc( offsetX + light_sensor[i].coordinateXY[0] * k, offsetY + light_sensor[i].coordinateXY[1] * k, 5, 0, 2 * Math.PI, false)
+        ctx.stroke();
+    }
+
+    //датчики движения
+    l = motion_detector["length"];
+    ctx.strokeStyle = 'black';
+    
+    for (var i=0;i<l;i++)
+    {         
+        ctx.beginPath();
+        ctx.arc( offsetX + motion_detector[i].coordinateXY[0] * k, offsetY + motion_detector[i].coordinateXY[1] * k, 5, 0, 2 * Math.PI, false)
+        ctx.stroke();
+    }        
 }
 
 function arrayMax(arr) {

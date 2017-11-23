@@ -83,11 +83,8 @@ def index():
 def room():
     data = json.loads(request.form.get('data'))
     ss = data['value']
-    print(ss)
-
     room = request.json
-    print(room)
-    r = mongo.db.room.find_one({'_id':ss});    
+    r = mongo.db.room.find_one({'_id':ss});
     print(r);
     return dumps(r);
 
@@ -96,11 +93,28 @@ def room():
 def lights():
     data = json.loads(request.form.get('data'))
     ss = data['value']
-    print(ss)
-
     lights = request.json
-    print(lights)
-    r = mongo.db.lights.find_one();    
+    r = mongo.db.lights.find({'room':ss});    
+    print(r);
+    return dumps(r);
+
+@app.route('/light_sensor', methods=['POST'])
+@flask_login.login_required
+def light_sensor():
+    data = json.loads(request.form.get('data'))
+    ss = data['value']
+    light_sensor = request.json
+    r = mongo.db.light_sensor.find({'room':ss});    
+    print(r);
+    return dumps(r);
+
+@app.route('/motion_detector', methods=['POST'])
+@flask_login.login_required
+def motion_detector():
+    data = json.loads(request.form.get('data'))
+    ss = data['value']
+    motion_detector = request.json
+    r = mongo.db.motion_detector.find({'room':ss});    
     print(r);
     return dumps(r);
 
