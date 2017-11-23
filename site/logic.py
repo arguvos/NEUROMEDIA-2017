@@ -13,7 +13,7 @@ login_manager.init_app(app)
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['MONGO_DBNAME'] =  'db'
-flask_login.home_page='index.html'
+flask_login.home_page='/'
 mongo = PyMongo(app)
 #Логи и пароль TODO: переместить в базу данных и использовать для пароля md5
 users = {'admin': {'password': 'admin'}}
@@ -63,7 +63,7 @@ def login():
         user = User()
         user.id = login
         flask_login.login_user(user)
-        return flask.redirect(flask.url_for('home_page'))
+        return flask.redirect(flask.url_for('index'))
 
     return 'Bad login'
 
@@ -78,15 +78,31 @@ def logout():
 def index():
     return render_template('index.html')
 
-@app.route('/home', methods=['POST'])
+@app.route('/room', methods=['POST'])
 @flask_login.login_required
-def home():
-    #room = request.json
-    #print(room)
-    r = mongo.db.room.find({'name':room});
+def room():
+    data = json.loads(request.form.get('data'))
+    ss = data['value']
+    print(ss)
+
+    room = request.json
+    print(room)
+    r = mongo.db.room.find_one({'_id':ss});    
     print(r);
-    l = list(r)
-    return dumps(l);
+    return dumps(r);
+
+@app.route('/lights', methods=['POST'])
+@flask_login.login_required
+def lights():
+    data = json.loads(request.form.get('data'))
+    ss = data['value']
+    print(ss)
+
+    lights = request.json
+    print(lights)
+    r = mongo.db.lights.find_one();    
+    print(r);
+    return dumps(r);
 
 if __name__ == '__main__':
     app.run(debug=True)

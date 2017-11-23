@@ -27,24 +27,30 @@
         <script src="static/js/script1.js"></script>
     </header>
 
-<canvas id="canvas" style="display:block; border:1px solid #d3d3d3"></canvas>
+<canvas id="canvas" width="400" height="200" style="display:block; border:1px solid #d3d3d3"></canvas>
 Введите название комнаты: <input type="text" id="txt"/> <input type="button" id="btn" value="Нарисовать план">
 
 <script>
-function someFunc(){
+resize()
+var room;
+var lights;
+var light_sensor;
+var motion_detector;
+
+function getData(){
+    var data = {
+            data: JSON.stringify({
+                "value": document.getElementById("txt").value
+            })
+        }
+
     $.ajax({
-        url: '/home',
+        url: '/room',
         dataType: 'json',
-        data: document.getElementById("txt").value,
+        data: data,        
         type: 'POST',
         success: function(response){
-            //resize();
-            var c = document.getElementById("canvas");
-            var ctx = c.getContext("2d");
-            ctx.moveTo(0,0);
-            ctx.lineTo(200,100);
-            ctx.stroke();
-            
+            room = response;
             console.log(response);
         },
         error: function(error){
@@ -52,9 +58,68 @@ function someFunc(){
         }
     });
 
+    $.ajax({
+        url: '/lights',
+        dataType: 'json',
+        data: data,        
+        type: 'POST',
+        success: function(response){
+            lights = response;
+            console.log(response);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+    draw(room, lights, light_sensor, motion_detector)
 }
 
-document.getElementById("btn").onclick = someFunc;
+function draw(room, lights, light_sensor, motion_detector){
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = "#"
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = 'grey';
+    ctx.lineCap="round";
+    
+    l = room.coordinateX["length"];
+    board = 20;
+    kX = (canvas.width-board)/arrayMax(room.coordinateX);
+    kY = (canvas.height-board)/arrayMax(room.coordinateY);
+
+    k = kX < kY ? kX : kY
+
+    offsetX = ( (canvas.width) - arrayMax(room.coordinateX) * k ) / 2
+    offsetY = ( (canvas.height) - arrayMax(room.coordinateY) * k ) / 2
+
+    //стены
+    for (var i=0;i<l;i++)
+    {
+        ctx.beginPath();
+        if(i!=l-1)
+        {
+            ctx.moveTo( offsetX + room.coordinateX[i] * k, offsetY + room.coordinateY[i] * k);
+            ctx.lineTo( offsetX + room.coordinateX[i+1] * k, offsetY + room.coordinateY[i+1] * k);
+        }
+        else
+        {
+            ctx.moveTo( offsetX + room.coordinateX[i] * k,  offsetY + room.coordinateY[i] * k);
+            ctx.lineTo( offsetX + room.coordinateX[0] * k,  offsetY + room.coordinateY[0] * k);   
+        }
+        ctx.stroke();
+    }
+
+    //свет
+    //lights.coordinateXY[0], lights.coordinateXY[0]
+}
+
+function arrayMax(arr) {
+  return arr.reduce(function (p, v) {
+    return ( p > v ? p : v );
+  });
+}
+
+document.getElementById("btn").onclick = getData;
 
 
 function resize() {
@@ -64,9 +129,9 @@ function resize() {
     // resize the canvas to fill browser window dynamically
     window.addEventListener('resize', resizeCanvas, false);
 
-    function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+    function resizeCanvas() {            
+            canvas.width = window.innerWidth - 2;
+            canvas.height = window.innerHeight < 500 ? window.innerHeight : 500;
             drawStuff(); 
     }
     resizeCanvas();
