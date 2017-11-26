@@ -1,208 +1,97 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-        <title>Blue Bwoy Mobi Home Page - Free mobile website template which supports Iphone, Android, Maemo, Smartphone, High End Touch and other mobile devices</title>
-        <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='styles/style.css') }}"/>
-        <meta name="keywords" content="free mobile website templates, iphone, android, high end touch" />
-        <meta name="description" content="Blue Bwoy Mobi is a free mobile template work in all most all mobile devices. you are free to use for both commercial and non-commercial purpose by attributing to http://mobifreaks.com" />
-    </head>
-<body>
-	<header>
-        <div class="logo">
-            <a href="index.html">
-                <img src="static/logo.png" alt="logo for free mobile website template - Blue Bwoy Mobi" />
-            </a>
-        </div>
-		<nav class="vertical menu">
-            <ul>
-                <li><a href="index.html">Home page</a></li>
-                <li><a href="basic_markup.html">Basic Markup</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav> 
-        <div class="clear"></div>
-        <script src="static/js/jquery-1.9.0.js"></script>
-        <script src="static/js/script.js"></script>
-    </header>
+<html lang="ru">
 
-<canvas id="canvas" width="400" height="200" style="display:block; border:1px solid #d3d3d3"></canvas>
-Введите название комнаты: <input type="text" id="txt"/> <input type="button" id="btn" value="Нарисовать план">
+  <head>
+    <meta charset="utf-8">
+    <title>Умное освещение</title>
+    <!-- Пример подключения стилей из папки css -->
+    <link rel="stylesheet" href= "{{ url_for('static',filename='styles/style1.css') }}">
+  </head>
+
+  <body>
+  <div id="bodf">  
+    
+	  <div class="logo1" ><img class="logo" src="{{ url_for('static',filename='img/logo.png') }}"	></div>
+      <div class="h1"> Умное освещение</div>
+	  
+	  <div id="plan-id" class="plan">
+        <canvas id="canvas" width="400" height="200"></canvas>          
+      </div>
+<script src="static/js/jquery-1.9.0.js"></script>
+<script src="static/js/script.js"></script>		
+
+Этаж
+<select id="floor_s" onchange="javascript:change_room_s();">
+	<option value="1">1</option>
+	<option value="2">2</option>
+</select>
+Комната
+<select id="room_s" onchange="javascript:drawTable();">
+</select>
+
+<input type="button" value="Нарисовать" onclick="javascript:draw_btn();">
+
+<table id=mytable>
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+</div>
 
 <script>
-resize()
-var room;
-var lights;
-var light_sensor;
-var motion_detector;
-
-function getData(){
-    var data = {
-            data: JSON.stringify({
-                "value": document.getElementById("txt").value
-            })
-        }
-
-    $.ajax({
-        url: '/room',
-        dataType: 'json',
-        data: data,        
-        type: 'POST',
-        success: function(response){
-            room = response;
-            console.log(response);
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
-
-    $.ajax({
-        url: '/lights',
-        dataType: 'json',
-        data: data,        
-        type: 'POST',
-        success: function(response){
-            lights = response;
-            console.log(response);
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
-
-    $.ajax({
-        url: '/light_sensor',
-        dataType: 'json',
-        data: data,        
-        type: 'POST',
-        success: function(response){
-            light_sensor = response;
-            console.log(response);
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
-
-    $.ajax({
-        url: '/motion_detector',
-        dataType: 'json',
-        data: data,        
-        type: 'POST',
-        success: function(response){
-            motion_detector = response;
-            console.log(response);
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });        
-    draw(room, lights, light_sensor, motion_detector)
+function draw_btn()
+{
+var sel = document.getElementById("room_s");
+	var val = sel.options[sel.selectedIndex].text;
+	getData(val);
+	draw();
 }
 
-function draw(room, lights, light_sensor, motion_detector){
-    var c = document.getElementById("canvas");
-    var ctx = c.getContext("2d");
-    ctx.fillStyle = "#"
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = 'grey';
-    ctx.lineCap="round";
-    
-    l = room.coordinateX["length"];
-    board = 20;
-    kX = (canvas.width-board)/arrayMax(room.coordinateX);
-    kY = (canvas.height-board)/arrayMax(room.coordinateY);
 
-    k = kX < kY ? kX : kY
+function change_room_s(){
+	var n = document.getElementById("floor_s").options.selectedIndex;
+	getFloor();
+	l = floor[n].room["length"];
+	var elem = document.getElementById('room_s');
+	elem.innerHTML='';
 
-    offsetX = ( (canvas.width) - arrayMax(room.coordinateX) * k ) / 2
-    offsetY = ( (canvas.height) - arrayMax(room.coordinateY) * k ) / 2
-
-    //стены
-    for (var i=0;i<l;i++)
-    {
-        ctx.beginPath();
-        if(i!=l-1)
-        {
-            ctx.moveTo( offsetX + room.coordinateX[i] * k, offsetY + room.coordinateY[i] * k);
-            ctx.lineTo( offsetX + room.coordinateX[i+1] * k, offsetY + room.coordinateY[i+1] * k);
-        }
-        else
-        {
-            ctx.moveTo( offsetX + room.coordinateX[i] * k,  offsetY + room.coordinateY[i] * k);
-            ctx.lineTo( offsetX + room.coordinateX[0] * k,  offsetY + room.coordinateY[0] * k);   
-        }
-        ctx.stroke();
-    }
-
-    //свет
-    l = lights["length"];
-    
-    for (var i=0;i<l;i++)
-    {        
-        ctx.strokeStyle = lights[i].color;
-        ctx.beginPath();
-
-        ctx.arc( offsetX + lights[i].coordinateXY[0] * k, offsetY + lights[i].coordinateXY[1] * k, 5, 0, 2 * Math.PI, false)
-        ctx.stroke();
-    }
-
-    //датчик света
-    l = light_sensor["length"];
-    ctx.strokeStyle = 'green';
-    
-    for (var i=0;i<l;i++)
-    {         
-        ctx.beginPath();
-        ctx.arc( offsetX + light_sensor[i].coordinateXY[0] * k, offsetY + light_sensor[i].coordinateXY[1] * k, 5, 0, 2 * Math.PI, false)
-        ctx.stroke();
-    }
-
-    //датчики движения
-    l = motion_detector["length"];
-    ctx.strokeStyle = 'black';
-    
-    for (var i=0;i<l;i++)
-    {         
-        ctx.beginPath();
-        ctx.arc( offsetX + motion_detector[i].coordinateXY[0] * k, offsetY + motion_detector[i].coordinateXY[1] * k, 5, 0, 2 * Math.PI, false)
-        ctx.stroke();
-    }        
+	for (var i=0;i<l;i++)
+	{
+		elem.options[i] = new Option(floor[n].room[i], "str0");
+	}
+	drawTable();
 }
 
-function arrayMax(arr) {
-  return arr.reduce(function (p, v) {
-    return ( p > v ? p : v );
-  });
+function drawTable(){
+	var Table = document.getElementById("mytable");
+	Table.innerHTML = "";
+	var row = Table.insertRow(0);
+	
+	var sel = document.getElementById("room_s");
+	var val = sel.options[sel.selectedIndex].text;
+	getLights(val);
+	l = lights["length"];    	
+	for (var i=l;i>0;i--)
+	{
+		var row = Table.insertRow(0);
+		var cell1 = row.insertCell(0);
+		cell1.innerHTML = "Источник света №"+(i-1);
+		var cell2 = row.insertCell(1);
+		cell2.innerHTML = "<input id=\"color_s\" type=\"color\" name=\"bg\" value=\"#ff0000\">";
+		var cell3 = row.insertCell(2);
+		cell3.innerHTML = "Вкл:<input name=\"dzen\" type=\"radio\" value=\"on\"> Выкл: <input name=\"dzen\" type=\"radio\" value=\"on\">";
+	}
 }
 
-document.getElementById("btn").onclick = getData;
-
-
-function resize() {
-    var canvas = document.getElementById('canvas'),
-            context = canvas.getContext('2d');
-
-    // resize the canvas to fill browser window dynamically
-    window.addEventListener('resize', resizeCanvas, false);
-
-    function resizeCanvas() {            
-            canvas.width = window.innerWidth - 2;
-            canvas.height = window.innerHeight < 500 ? window.innerHeight : 500;
-            drawStuff(); 
-    }
-    resizeCanvas();
-
-    function drawStuff() {
-            // do your drawing stuff here
-    }
-}
+change_room_s();
+drawTable();
 </script>
-
-    <footer>
-        <p class="copy">&copy; 2012 yourdomainname.com | All right reserved &bull; Design By <a href="http://www.mobifreaks.com" title="Design By Mobifreaks.com">Mobifreaks.com</a></p>
-    </footer>
-</body>
+	
+  <header class="header">   
+  </header> 
+ 
+  <footer id="footer">   
+  </footer>  
+  </body> 
 </html>

@@ -78,6 +78,16 @@ def logout():
 def index():
     return render_template('index.html')
 
+@app.route('/floor', methods=['POST'])
+@flask_login.login_required
+def floor():
+    data = json.loads(request.form.get('data'))
+    ss = data['value']
+    floor = request.json
+    r = mongo.db.floor.find();
+    print(r);
+    return dumps(r);
+
 @app.route('/room', methods=['POST'])
 @flask_login.login_required
 def room():
