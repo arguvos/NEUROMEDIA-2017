@@ -1,53 +1,63 @@
 <!DOCTYPE html>
 <html lang="ru">
 
-  <head>
-    <meta charset="utf-8">
-    <title>Умное освещение</title>
-    <!-- Пример подключения стилей из папки css -->
-    <link rel="stylesheet" href= "{{ url_for('static',filename='styles/style1.css') }}">
-  </head>
+<head>
+	<meta charset="utf-8">
+	<title>Умное освещение</title>
+	<!-- Пример подключения стилей из папки css -->
+	<link rel="stylesheet" href= "{{ url_for('static',filename='styles/style1.css') }}">
+</head>
 
-  <body>
-  <div id="bodf">  
-    
-	  <div class="logo1" ><img class="logo" src="{{ url_for('static',filename='img/logo.png') }}"	></div>
-      <div class="h1"> Умное освещение</div>
-	  
+<body>
+<div id="bodf"> 
+<table class="cap">
+<tr>
+<td rowspan="2"> <a href="siterab1.html" class="logo"><img class="logo" src="{{ url_for('static',filename='img/logo.png') }}"> </a></td>
+<td class="h2 right"><a href="inner.html" class="user">User</a></td> 
+</tr>
+<tr> 
+<td class="h1"><a href="siterab1.html">Умное освещение</a></td> 
+</tr>
+</table>
 	  <div id="plan-id" class="plan">
         <canvas id="canvas" width="400" height="200"></canvas>          
       </div>
 <script src="static/js/jquery-1.9.0.js"></script>
 <script src="static/js/script.js"></script>		
 
-Этаж
-<select id="floor_s" onchange="javascript:change_room_s();">
-	<option value="1">1</option>
-	<option value="2">2</option>
-</select>
-Комната
-<select id="room_s" onchange="javascript:drawTable();">
-</select>
+<div class="str">
+	<table>
+		<tr>
+			<td>
+				<b>Этаж</b>
+				<select id="floor_s" onchange="javascript:change_room_s();">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				</select>
+			</td>
+			<td>		
+				<b>Комната</b>
+				<select id="room_s" onchange="javascript:drawTable();">
+				</select>
+			</td>
+		</tr>
+	</table>
 
-<input type="button" value="Нарисовать" onclick="javascript:draw_btn();">
-
-<table id=mytable>
-  <tr>
-    <td></td>
-  </tr>
-</table>
-
+	</div>
+	<table id=mytable>
+	  <tr>
+		<td></td>
+	  </tr>
+	</table>
 </div>
 
 <script>
-function draw_btn()
-{
-var sel = document.getElementById("room_s");
+
+function getDataForDraw() {
+	var sel = document.getElementById("room_s");
 	var val = sel.options[sel.selectedIndex].text;
 	getData(val);
-	draw();
 }
-
 
 function change_room_s(){
 	var n = document.getElementById("floor_s").options.selectedIndex;
@@ -71,19 +81,23 @@ function drawTable(){
 	var sel = document.getElementById("room_s");
 	var val = sel.options[sel.selectedIndex].text;
 	getLights(val);
-	l = lights["length"];    	
+	l = lights["length"];
 	for (var i=l;i>0;i--)
 	{
 		var row = Table.insertRow(0);
 		var cell1 = row.insertCell(0);
 		cell1.innerHTML = "Источник света №"+(i-1);
 		var cell2 = row.insertCell(1);
-		cell2.innerHTML = "<input id=\"color_s\" type=\"color\" name=\"bg\" value=\"#ff0000\">";
+		str=lights[i-1].color;
+		cell2.innerHTML = "<input id=\"color_s\" type=\"color\" name=\"bg\" value="+lights[i-1].color+"\>";
 		var cell3 = row.insertCell(2);
-		cell3.innerHTML = "Вкл:<input name=\"dzen\" type=\"radio\" value=\"on\"> Выкл: <input name=\"dzen\" type=\"radio\" value=\"on\">";
+		value = state[lights[i-1].number]*100;
+		cell3.innerHTML = "<form class=\"form\" onsubmit=\"return false\" oninput=\"level.value = flevel.valueAsNumber\"> <input name=\"flevel\" id=\"flying\" type=\"range\" min=\"0\" max=\"100\" value=\""+value+"\" step=\"1\"><output class=\"outputesize\" for=\"flying\" name=\"level\">"+value+"</output> </form>"
 	}
+	getDataForDraw();
+	draw();
 }
-
+getState();
 change_room_s();
 drawTable();
 </script>

@@ -1,0 +1,143 @@
+body {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  line-height: 24px;
+  color: #000000;
+  padding:0px;
+
+  /*  Пример подключения изображения из папки  img */
+ 
+}
+.header{
+background-color:#3493ad;
+width:100%;
+height:150px;
+margin:0px;
+padding:0px;
+left:0;
+top:0;
+position:absolute;
+}
+
+#footer{
+background-color:#3493ad;
+ position: absolute;
+	margin-top: -100px; /* negative value of footer height */
+	height: 100px;
+	width:100%;
+	clear:both;
+	padding:0px;
+	left:0px;
+}
+#bodf{
+background:rgba(215,205,148,0.4);
+width:90%;
+height:1200px;
+margin:auto;
+margin-top:20px;
+margin-bottom:20px;
+padding:auto;
+border:solid 10px  rgba(247,246,243,0.4);
+position: relative; z-index: 1;
+min-width:900px;
+}
+.h1{
+font-size: 60px; 
+position: relative;  
+color: black; 
+text-align: right; 
+padding-right:30px;
+margin: 0 0 3em;
+font-weight:bold;
+text-align: right;
+padding-top:50px;
+padding-bottom:20px;
+}
+.logo{
+float: left; 
+position: relative;
+width:200px; 
+padding:20px;
+margin: 0 0 3em;
+text-align: left;
+padding-left:40px;
+padding-top:25px;
+padding-bottom:0px;
+}	
+
+h2{
+padding:20px;
+padding-top:35px;
+font-size:20px;
+padding-bottom:0px;
+
+}
+.bold{
+
+	font-size:17px;
+}
+li{
+	font-size:17px;
+	font-weight:normal;
+}
+
+
+p{  min-width:720px;
+	padding-top:60px;
+	font-size:17px;
+	font-weight:bold;
+    text-align:justify;
+	max-width:720px;
+	margin-left:35px;
+}
+h1{
+	padding:30px;
+    padding-top:70px;
+    font-size:23px;
+    padding-bottom:0px;
+}
+h3{
+font-size: 60px;  
+color: black; 
+text-align: center; 
+font-weight:bold;
+padding-top:50px;
+padding-bottom:20px;
+text-align: center;
+margin:auto;
+margin:auto;
+}
+.plan{
+	background:#b0aebf;
+width:95%;
+height:500px;
+margin:auto;
+
+margin-bottom:20px;
+padding:auto;
+border:solid 10px  rgba(247,246,243,0.4);
+position: relative;
+z-index: 1;
+
+}
+table{
+     border-collapse: collapse;
+     width:60%;
+	 margin:auto;
+	 margin-bottom:20px;
+     padding:auto;
+	 font-size:20px;
+	
+}
+td {
+     border-bottom: 2px solid lightgray;
+     padding: 10px;
+	 font-size:16px;
+	  font-weight:bold;
+     }
+.room{
+	font-weight:normal;
+}
+.right{
+text-align: right;
+}

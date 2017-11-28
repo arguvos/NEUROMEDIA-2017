@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Умное освещение</title>
+    <!-- Пример подключения стилей из папки css -->
+    <link rel="stylesheet" href= "{{ url_for('static',filename='styles/style.css') }}">
+  </head>
+
+  <body>
+  <div id="bodf">  
+    
+	  <div class="logo1" ><img class="logo" src="img/logo.png"></div>
+      <div class="h1"> Умное освещение</div>
+	  <div class="plan"></div>
+	  	 
+
+	  <div id="plan-id" class="plan">
+        <canvas id="canvas" width="400" height="200"></canvas>          
+      </div>
+<script src="static/js/jquery-1.9.0.js"></script>
+<script src="static/js/script.js"></script>	
+
+<table>
+	<tr>
+		<td >Этаж</td>>			
+		<td class="right">Комната</td>  
+	</tr>
+	<tr>
+		<td class="room"> <input checked type="radio"> Первый этаж </input></td>
+		<td class="room right"> <input type="radio" name="ctrl" value="kitchen" id="kitchen">Кухня</input></td>           
+	</tr>
+	<tr>
+		<td class="room"></td>
+		<td class="room right"> <input type="radio" name="ctrl" value="bedroom" id="bedroom">Спальная комната</input> </td>           
+	</tr>
+	<tr>
+		<td class="room"></td>
+		<td class="room right"> <input type="radio" name="ctrl" value="corridor" id="corridor">Коридор</input> </td>           
+	</tr>
+	<tr>
+		<td class="room"></td>
+		<td class="room right"> <input type="radio" name="ctrl" value="bathroom" id="bathroom">Ванная комната</input> </td>           
+	</tr>
+</table>
+
+	   
+	   
+	</div>
+  </div>
+  
+  <header class="header">
+   
+  </header> 
+ 
+  <footer id="footer">
+   
+   </footer>
+   
+  </body>
+</html>

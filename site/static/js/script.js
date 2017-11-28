@@ -1,10 +1,27 @@
 resize()
-		var floor;
-		var room;
-		var lights;
-		var light_sensor;
-		var motion_detector;
+var floor;
+var room;
+var lights;
+var light_sensor;
+var motion_detector;
+var state;
 
+function getState(){
+	$.ajax({
+        url: '/get_state',
+        dataType: 'json',
+        data: {data: JSON.stringify({"value": 'def'})},
+        type: 'POST',
+		async: false,
+        success: function(response){
+            window.state = response;
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+		
 function getFloor(){
 	$.ajax({
         url: '/floor',
@@ -161,7 +178,9 @@ function draw(){
     }
 
     //свет
-    l = lights["length"];    
+	max = 15;
+	min = 5;
+    l = lights["length"];
     for (var i=0;i<l;i++)
     {        
         ctx.strokeStyle = lights[i].color;
@@ -224,36 +243,9 @@ function resize() {
     }
 }
 
-var strRoom;
-$(function() 
-    {
-	   $("input[name=ctrl]").on("change", function()
-	   {
-	   var checkElements=document.getElementsByName("ctrl");
-		  for(var i=0; i<checkElements.length; i++)
-          {
-            checkElement = checkElements[i];
-			if (checkElement.checked==1)
-			{
-			  strRoom=checkElement.value;			  
-			  getData();
-			  draw();
-			}  
-		  }
-		}
-       );                               
-	}
-);
+function update(){
+	getState()	
+}
 
-function sleep(ms) {
-ms += new Date().getTime();
-while (new Date() < ms){}
-} 
+//setTimeout(update, 10000);
 
-addEventListener("keydown", function(event) {
-	if (event.keyCode == 86){
-		draw();
-		//table();
-	}
-		//drawTable();
-});

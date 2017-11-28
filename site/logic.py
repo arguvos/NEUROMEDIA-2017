@@ -128,5 +128,12 @@ def motion_detector():
     print(r);
     return dumps(r);
 
+@app.route('/get_state', methods=['POST'])
+@flask_login.login_required
+def get_state():
+    data = [0,1,0,1,0,1,0,1,0,1,0,1,0,1]
+    return dumps(data);
+
+
 if __name__ == '__main__':
     app.run(debug=True)
